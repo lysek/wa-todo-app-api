@@ -1,0 +1,149 @@
+FORMAT: 1A
+HOST: http://akela.mendelu.cz/~lysek/devel/todo
+
+# WA todo app
+
+TODO aplikace ze cvičení - popis REST API.
+
+## Úkoly [/tasks]
+
+### Výpis všech úkolů [GET]
+
+Výpis úkolů vrací všechny úkoly seřazené podle data a času přidání.
+
++ Response 200 (application/json)
+
+        [
+            {
+                "id": "146",
+                "add_time": "1458722599",
+                "update_time": null,
+                "completed": false,
+                "title": "Zalít kytky",
+                "description": "...aby nezdechly."
+            
+            },
+            {
+                "id": "147",
+                "add_time": "1458722629",
+                "update_time": null,
+                "completed": true,
+                "title": "Nakoupit",
+                "description": "Mléko, chleba, rohlíky, salám."
+            },
+            {
+                "id": "148",
+                "add_time": "1458722950",
+                "update_time": null,
+                "completed": false,
+                "title": "Zpracovat projekt.",
+                "description": ""
+            }
+        ]
+
+### Vytvořit nový úkol [POST]
+
+Po vytvoření úkolu API odpoví stavem success a novým úkolem s ID a časem z DB.
+
++ Request (application/json)
+
+    + Attributes
+        + title (required, string) - Název
+        + description (required, string) - Popis
+        
+    + Body
+    
+            {
+                "title": "Název nového úkolu",
+                "description": "Popis nového úkolu"
+            }
+
++ Response 200 (application/json)
+
+    + Attributes
+        + success (required, boolean) - Stav
+        + task (required, object) - Vytvořený úkol
+        
+    + Body
+
+            {
+                "success": true,
+                "task": {
+                    "id": "149",
+                    "add_time": "1458892950",
+                    "update_time": null,
+                    "completed": false,
+                    "title": "Název nového úkolu",
+                    "description": "Popis nového úkolu"
+                }
+            }
+
+## Úkol [/tasks/{id}]
+
++ Parameters
+    + id (number) - ID úkolu
+
+### Detaily úkolu [GET]
+
+Vrací informace o úkolu.
+
++ Response 200 (application/json)
+
+
+    + Attributes
+        + id (required, number) - ID úkolu
+        + add_time (required, string) - Datum a čas vytvoření
+        + update_time (required, string) - Datum a čas úpravy
+        + completed (required, boolean) - Stav
+        + title (required, string) - Název
+        + description (required, string) - Popis
+        
+    + Body
+    
+            {
+                "id": "148",
+                "add_time": "1458722950",
+                "update_time": null,
+                "completed": false,
+                "title": "Zpracovat projekt.",
+                "description": ""
+            }
+
+### Upravit úkol [PUT]
+
+Aktualizace dat úkolu.
+
++ Request (application/json)
+
+    + Attributes
+        + title (required, string) - Název
+        + description (required, string) - Popis
+        + completed (required, boolean) - Stav
+        
+    + Body
+
+            {
+                "title": "Název nového úkolu",
+                "description": "Popis nového úkolu",
+                "completed": false
+            }
+
++ Response 200 (application/json)
+
+### Smazat úukol [DELETE]
+
+Smaže úkol podle ID.
+
++ Response 200 (application/json)
+
+## Nastavení stavu úkolu [/tasks/{id}/{state}]
+
+Parametrem state se volí, jestli se má úkol nastavit jako hotový nebo nehotový.
+
++ Parameters
+    + id (number) - ID úkolu
+    + state (string) - stav: complete nebo incomplete
+
+### Nastavení stavu [PUT]
+
++ Response 200 (application/json)
